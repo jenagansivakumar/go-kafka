@@ -21,6 +21,8 @@ func createComment(c fiber.Ctx) error {
 		log.Println(err)
 		c.Status(400).JSON(&fiber.Map{
 			"success": false,
+			"message": err,
 		})
+		return err
 	}
 }
