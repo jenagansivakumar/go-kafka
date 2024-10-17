@@ -16,8 +16,8 @@ func main() {
 	app.Listen(":3000")
 }
 
-func PushCommentToQueue(topic string, message []byte) {
-
+func PushCommentToQueue(topic string, message []byte) error {
+	brokersUrl := []string{"localhost: 8080"}
 }
 
 func createComment(c fiber.Ctx) error {
