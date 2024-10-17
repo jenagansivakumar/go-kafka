@@ -3,6 +3,9 @@ package main
 import (
 	"encoding/json"
 	"log"
+
+	"github.com/IBM/sarama"
+	"github.com/gofiber/fiber/v2"
 )
 
 type comment struct {
@@ -16,8 +19,14 @@ func main() {
 	app.Listen(":3000")
 }
 
+func ConnectProducer(brokersUrl []string) (sarama.SyncProducer, error) {
+	configure := sarama.NewConfig()
+	config.Producer.Return.Successes = true
+}
+
 func PushCommentToQueue(topic string, message []byte) error {
 	brokersUrl := []string{"localhost: 8080"}
+	producer, err := ConnectProducer(brokersUrl)
 }
 
 func createComment(c fiber.Ctx) error {
