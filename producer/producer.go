@@ -41,8 +41,9 @@ func PushCommentToQueue(topic string, message []byte) error {
 	defer producer.Close()
 	msg := &sarama.ProducerMessage{
 		Topic: topic,
-		Value: sarama.StringEncoder()
+		Value: sarama.StringEncoder(message),
 	}
+	producer.SendMessage(msg)
 }
 
 func createComment(c fiber.Ctx) error {
