@@ -16,8 +16,12 @@ func main() {
 	app.Listen(":3000")
 }
 
+func PushCommentToQueue(topic string, message []byte) {
+
+}
+
 func createComment(c fiber.Ctx) error {
-	cmt := new(Comment)
+	cmt := new(comment)
 	if err := c.BodyParser(cmt); err != nil {
 		log.Println(err)
 		c.Status(400).JSON(&fiber.Map{
@@ -30,13 +34,15 @@ func createComment(c fiber.Ctx) error {
 	PushCommentToQueue("comments", cmtInBytes)
 	c.JSON(&fiber.Map{
 		"Success": true,
-		"message": "Comment pushed successfully!",
-		"Comment": cmt,
+		"message": "comment pushed successfully!",
+		"comment": cmt,
 	})
 	if err != nil {
 		c.Status(500).JSON(&fiber.Map{
-			"Success": false
-			"Message": "Comment not pushed"
+			"Success": false,
+			"Message": "comment not pushed",
 		})
+		return err
 	}
+	return err
 }
