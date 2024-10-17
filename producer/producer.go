@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"log"
 )
 
@@ -24,5 +25,18 @@ func createComment(c fiber.Ctx) error {
 			"message": err,
 		})
 		return err
+	}
+	cmtInBytes, err := json.Marshal(cmt)
+	PushCommentToQueue("comments", cmtInBytes)
+	c.JSON(&fiber.Map{
+		"Success": true,
+		"message": "Comment pushed successfully!",
+		"Comment": cmt,
+	})
+	if err != nil {
+		c.Status(500).JSON(&fiber.Map{
+			"Success": false
+			"Message": "Comment not pushed"
+		})
 	}
 }
