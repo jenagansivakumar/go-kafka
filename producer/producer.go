@@ -10,7 +10,7 @@ import (
 )
 
 type comment struct {
-	Text string `form: "text" json: "text"`
+	Text string `json:"text"`
 }
 
 func main() {
@@ -34,7 +34,7 @@ func ConnectProducer(brokersUrl []string) (sarama.SyncProducer, error) {
 }
 
 func PushCommentToQueue(topic string, message []byte) error {
-	brokersUrl := []string{"localhost: 9092"}
+	brokersUrl := []string{"localhost:9092"}
 	producer, err := ConnectProducer(brokersUrl)
 	if err != nil {
 		return err
@@ -42,7 +42,7 @@ func PushCommentToQueue(topic string, message []byte) error {
 	defer producer.Close()
 	msg := &sarama.ProducerMessage{
 		Topic: topic,
-		Value: sarama.StringEncoder(message),
+		Value: sarama.ByteEncoder(message),
 	}
 	partition, offset, err := producer.SendMessage(msg)
 	if err != nil {
@@ -56,25 +56,30 @@ func createComment(c *fiber.Ctx) error {
 	cmt := new(comment)
 	if err := c.BodyParser(cmt); err != nil {
 		log.Println(err)
-		c.Status(400).JSON(&fiber.Map{
+		return c.Status(400).JSON(&fiber.Map{
 			"success": false,
-			"message": err,
+			"message": "Invalid request format",
 		})
-		return err
 	}
 	cmtInBytes, err := json.Marshal(cmt)
-	PushCommentToQueue("comments", cmtInBytes)
-	c.JSON(&fiber.Map{
-		"Success": true,
+	if err != nil {
+		log.Println(err)
+		return c.Status(500).JSON(&fiber.Map{
+			"success": false,
+			"message": "Error encoding comment",
+		})
+	}
+	err = PushCommentToQueue("comments", cmtInBytes)
+	if err != nil {
+		log.Println(err)
+		return c.Status(500).JSON(&fiber.Map{
+			"success": false,
+			"message": "Failed to push comment to queue",
+		})
+	}
+	return c.JSON(&fiber.Map{
+		"success": true,
 		"message": "comment pushed successfully!",
 		"comment": cmt,
 	})
-	if err != nil {
-		c.Status(500).JSON(&fiber.Map{
-			"Success": false,
-			"Message": "comment not pushed",
-		})
-		return err
-	}
-	return err
 }
