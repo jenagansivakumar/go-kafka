@@ -1,9 +1,12 @@
 package main
 
-import (
-	"fmt"
-)
-
 func main() {
-	fmt.Println("hello world")
+	topic := "comments"
+
+	worker, err := ConnectConsumer([]string{"localhost:29092"})
+
+	if err != nil {
+		panic(err)
+	}
+
 }
