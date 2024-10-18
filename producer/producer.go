@@ -23,7 +23,7 @@ func main() {
 func ConnectProducer(brokersUrl []string) (sarama.SyncProducer, error) {
 	config := sarama.NewConfig()
 	config.Producer.Return.Successes = true
-	config.Producer.RequireAcks = sarama.WaitForAll
+	config.Producer.RequiredAcks = sarama.WaitForAll
 	config.Producer.Retry.Max = 5
 
 	conn, err := sarama.NewSyncProducer(brokersUrl, config)
