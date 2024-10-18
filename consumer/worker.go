@@ -1,5 +1,12 @@
 package main
 
+import (
+	"fmt"
+	"os"
+	"os/signal"
+	"syscall"
+)
+
 func main() {
 	topic := "comments"
 
@@ -12,4 +19,8 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+
+	fmt.Println("Consumer started")
+	sigChain := make(chan os.Signal, 1)
+	signal.Notify(sigChain, syscall.SIGINT, syscall.SIGTERM)
 }
