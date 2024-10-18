@@ -10,7 +10,7 @@ import (
 func main() {
 	topic := "comments"
 
-	worker, err := ConnectConsumer([]string{"localhost:29092"})
+	worker, err := connectConsumer([]string{"localhost:29092"})
 
 	if err != nil {
 		panic(err)
@@ -39,8 +39,21 @@ func main() {
 				fmt.Printf("Received message count: %d: | Topic (%s) | Message (%s)\n", msgCount, string(msg.Topic), string(msg.Value))
 			case <-sigchan:
 				fmt.Println("Interruption detected")
+				doneCh <- struct{{}}
 			}
 		}
 	}()
 
+	<- doneCh
+	fmt.Println("Processed", msgCount, "Messages")
+
+	if err := worker.Close(); err != nil{
+		panic(err)
+	}
+}
+
+func ConnectConsumer(brokersUrl [] string )(sarama.Consumer, error){
+	config := sarama.NewConfig()
+	config.Consumer.Return.Errors = true 
+	conn, err := sarama.NewConsumer(brokersUrl, config)
 }
