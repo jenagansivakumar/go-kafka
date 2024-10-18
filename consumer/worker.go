@@ -17,7 +17,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	consumer, err := worker.ConsumePartition(topic, 0, OffsetOldest)
+	consumer, err := worker.ConsumePartition(topic, 0, sarama.OffsetOldest)
 	if err != nil {
 		panic(err)
 	}
@@ -33,7 +33,7 @@ func main() {
 	go func() {
 		for {
 			select {
-			case err := <-consumer.Error():
+			case err := <-consumer.Errors():
 				fmt.Println(err)
 
 			case msg := <-consumer.Messages():
