@@ -16,7 +16,7 @@ type comment struct {
 func main() {
 	app := fiber.New()
 	api := app.Group("/api/v1")
-	api.Post("/comment", createComment)
+	api.Post("/comments", createComment)
 	app.Listen(":3000")
 }
 
@@ -34,7 +34,7 @@ func ConnectProducer(brokersUrl []string) (sarama.SyncProducer, error) {
 }
 
 func PushCommentToQueue(topic string, message []byte) error {
-	brokersUrl := []string{"localhost:9092"}
+	brokersUrl := []string{"localhost:29092"}
 	producer, err := ConnectProducer(brokersUrl)
 	if err != nil {
 		return err
