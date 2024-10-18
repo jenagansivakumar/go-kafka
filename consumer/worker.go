@@ -23,8 +23,8 @@ func main() {
 	}
 
 	fmt.Println("Consumer started")
-	sigChain := make(chan os.Signal, 1)
-	signal.Notify(sigChain, syscall.SIGINT, syscall.SIGTERM)
+	sigChan := make(chan os.Signal, 1)
+	signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM)
 
 	msgCount := 0
 
@@ -39,7 +39,7 @@ func main() {
 			case msg := <-consumer.Messages():
 				msgCount++
 				fmt.Printf("Received message count: %d: | Topic (%s) | Message (%s)\n", msgCount, string(msg.Topic), string(msg.Value))
-			case <-sigChain:
+			case <-sigChan:
 				fmt.Println("Interruption detected")
 				doneCh <- struct{}{}
 			}
