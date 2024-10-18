@@ -8,7 +8,10 @@ WORKDIR /app
 COPY . .
 
 # Build the Go app
-RUN go build -o worker ./worker.go
+RUN go build -o /app/worker ./worker/worker.go
+
+# Set permissions to make sure the executable can be run
+RUN chmod +x /app/worker
 
 # Command to run the app when the container starts
-CMD ["./worker"]
+CMD ["/app/worker"]
