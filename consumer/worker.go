@@ -8,5 +8,8 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-
+	consumer, err := worker.ConsumePartition(topic, 0, OffsetOldest)
+	if err != nil {
+		panic(err)
+	}
 }
