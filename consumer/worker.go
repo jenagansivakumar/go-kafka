@@ -5,6 +5,8 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+
+	"github.com/IBM/sarama"
 )
 
 func main() {
@@ -37,24 +39,24 @@ func main() {
 			case msg := <-consumer.Messages():
 				msgCount++
 				fmt.Printf("Received message count: %d: | Topic (%s) | Message (%s)\n", msgCount, string(msg.Topic), string(msg.Value))
-			case <-sigchan:
+			case <-sigChain:
 				fmt.Println("Interruption detected")
-				doneCh <- struct{{}}
+				doneCh <- struct{}{}
 			}
 		}
 	}()
 
-	<- doneCh
+	<-doneCh
 	fmt.Println("Processed", msgCount, "Messages")
 
-	if err := worker.Close(); err != nil{
+	if err := worker.Close(); err != nil {
 		panic(err)
 	}
 }
 
-func connectConsumer(brokersUrl [] string )(sarama.Consumer, error){
+func connectConsumer(brokersUrl []string) (sarama.Consumer, error) {
 	config := sarama.NewConfig()
-	config.Consumer.Return.Errors = true 
+	config.Consumer.Return.Errors = true
 	conn, err := sarama.NewConsumer(brokersUrl, config)
 	if err != nil {
 		return nil, err
