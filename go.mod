@@ -1,6 +1,6 @@
 module github.com/jenagansivakumar/go-kafka
 
-go 1.23.1
+go 1.20
 
 require (
 	github.com/IBM/sarama v1.43.3
