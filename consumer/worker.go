@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 	"os/signal"
-	"structs"
 	"syscall"
 )
 
@@ -29,13 +28,19 @@ func main() {
 
 	doneCh := make(chan struct{})
 
-	go func(){
+	go func() {
 		for {
 			select {
 			case err := <-consumer.Error():
-				fmt.Printf(err)
-			}
+				fmt.Println(err)
 
+			case msg := <-consumer.Messages():
+				msgCount++
+				fmt.Printf("Received message count: %d: | Topic (%s) | Message (%s)\n", msgCount, string(msg.Topic), string(msg.Value))
+			case <-sigchan:
+				fmt.Println("Interruption detected")
+			}
 		}
-	}
+	}()
+
 }
