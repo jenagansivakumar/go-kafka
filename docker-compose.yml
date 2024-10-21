@@ -26,7 +26,13 @@ services:
   go-app:
     build: .
     ports:
-      - "3000:3000"  
+      - "3000:3000"
     depends_on:
       - kafka
-    command: ["go", "run", "producer/producer.go"] 
+    command: ["go", "run", "producer/producer.go"]
+
+  worker:
+    build: .
+    depends_on:
+      - kafka
+    command: ["go", "run", "worker/worker.go"]
