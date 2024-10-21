@@ -22,3 +22,11 @@ services:
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+  go-app:
+    build: .
+    ports:
+      - "3000:3000"  
+    depends_on:
+      - kafka
+    command: ["go", "run", "producer/producer.go"] 
