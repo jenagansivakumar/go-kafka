@@ -32,13 +32,6 @@ docker compose up -d
 3. The API will be running at http://localhost:3000/api/v1/comments, and Kafka 
 will be running on localhost:29092.
 
-4. Go inside both the Worker and Producer folders and run both of these respectively:
-```
-go run worker.go
-```
-```
-go run producer.go
-```
 ## API Reference
 
 ### Post message
