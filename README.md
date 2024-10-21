@@ -35,11 +35,9 @@ will be running on localhost:29092.
 4. Go inside both the Worker and Producer folders and run both of these respectively:
 ```
 go run worker.go
-
 ```
 ```
 go run producer.go
-
 ```
 ## API Reference
 
