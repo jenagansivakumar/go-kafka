@@ -20,10 +20,6 @@
 
 ## Installation
 
-- Docker & Docker Compose installed
-- Go 1.20+ installed (if running without Docker)
-- Apache Kafka (setup is included in Docker Compose)
-
 1. Clone the repository:
    ```bash
    git clone https://github.com/jenagansivakumar/go-kafka.git
